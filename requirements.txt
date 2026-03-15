@@ -1,0 +1,6 @@
+streamlit
+python-dotenv
+groq
+fpdf2
+yfinance
+requests
