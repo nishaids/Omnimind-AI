@@ -4,6 +4,4 @@ groq
 fpdf2
 yfinance
 requests
-crewai==0.28.8
-chromadb==0.4.24
-pydantic==2.6.4
+crewai==1.6.1
