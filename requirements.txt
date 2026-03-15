@@ -4,3 +4,4 @@ groq
 fpdf2
 yfinance
 requests
+crewai
