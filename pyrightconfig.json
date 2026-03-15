@@ -1,0 +1,12 @@
+{
+  "pythonVersion": "3.10",
+  "venvPath": ".",
+  "venv": "venv",
+  "reportMissingImports": "none",
+  "reportMissingModuleSource": "none",
+  "reportAttributeAccessIssue": "none",
+  "reportIndexIssue": "none",
+  "reportArgumentType": "none",
+  "reportCallIssue": "none",
+  "typeCheckingMode": "off"
+}
