@@ -442,7 +442,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:transparent;}
 
   function runReveal(){
     requestAnimationFrame(()=> word.classList.add("reveal"));
-    const end = 200 + TEXT.replace(/\s/g,"").length*100 + 900;
+    const end = 200 + TEXT.replace(/[\\s]/g,"").length*100 + 900;
     setTimeout(()=>{
       word.classList.add("active","float-loop");
       startGlitch();
@@ -1420,7 +1420,7 @@ function edgePt(){const s=Math.floor(Math.random()*4);if(s===0)return{x:Math.ran
 function buildParticles(){particles.length=0;const chars=[...word.querySelectorAll(".char:not(.space)")];for(let i=0;i<chars.length;i++){const rect=chars[i].getBoundingClientRect();const n=Math.max(20,Math.floor(rect.width*1.1));for(let j=0;j<n;j++){const s=edgePt();const useCyan=j%2===0;particles.push({x:s.x,y:s.y,vx:(Math.random()-0.5)*1.5,vy:(Math.random()-0.5)*1.5,tx:rect.left+Math.random()*rect.width,ty:rect.top+Math.random()*rect.height,size:1+Math.random()*2,alpha:0.25+Math.random()*0.65,done:false,r:useCyan?0:168,g:useCyan?245:85,b:useCyan?255:247});}}}
 function renderParticles(ts){ctx.clearRect(0,0,window.innerWidth,window.innerHeight);let settled=0;for(let i=0;i<particles.length;i++){const p=particles[i];const dx=p.tx-p.x,dy=p.ty-p.y;const dist=Math.hypot(dx,dy);p.vx+=dx*0.018;p.vy+=dy*0.018;p.vx*=0.87;p.vy*=0.87;p.x+=p.vx;p.y+=p.vy;if(dist<2.5){p.done=true;settled++;p.alpha*=0.96;}if(p.alpha>0.01){ctx.beginPath();ctx.fillStyle=`rgba(${p.r},${p.g},${p.b},${p.alpha.toFixed(3)})`;ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();}}
 if(!settleStart&&settled>particles.length*0.65)settleStart=ts;if(settleStart&&(ts-settleStart)>900){ctx.clearRect(0,0,window.innerWidth,window.innerHeight);return;}raf=requestAnimationFrame(renderParticles);}
-function runReveal(){requestAnimationFrame(()=>word.classList.add("reveal"));const end=260+TEXT.replace(/\s/g,"").length*120+900;setTimeout(()=>{word.classList.add("active","float-loop");startGlitch();},end);}
+function runReveal(){requestAnimationFrame(()=>word.classList.add("reveal"));const end=260+TEXT.replace(/[\\s]/g,"").length*120+900;setTimeout(()=>{word.classList.add("active","float-loop");startGlitch();},end);}
 function startGlitch(){const chars=[...word.querySelectorAll(".char:not(.space)")];function trigger(){word.classList.add("glitch");for(let i=0;i<chars.length;i++){if(Math.random()<0.5){chars[i].classList.add("slice");chars[i].style.setProperty("--gx",((Math.random()-0.5)*9)+"px");chars[i].style.setProperty("--gy",((Math.random()-0.5)*5)+"px");chars[i].style.setProperty("--sk",((Math.random()-0.5)*12)+"deg");}}setTimeout(()=>{word.classList.remove("glitch");for(let i=0;i<chars.length;i++){chars[i].classList.remove("slice");chars[i].style.setProperty("--gx","0px");chars[i].style.setProperty("--gy","0px");chars[i].style.setProperty("--sk","0deg");}},145);setTimeout(trigger,1500+Math.random()*2800);}setTimeout(trigger,1400);}
 function start(){cancelAnimationFrame(raf);settleStart=0;createLetters();sizeCanvas();buildParticles();runReveal();raf=requestAnimationFrame(renderParticles);}
 window.addEventListener("resize",()=>{sizeCanvas();buildParticles();});
