@@ -1,51 +1,49 @@
-from crewai import Agent, Task, Crew, LLM
+"""
+OMNIMIND AI — agents/report_agent.py
+Synthesizes research, stock, and news data into an executive intelligence report
+using Groq LLM.
+"""
+
 import os
+from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
 
+
 def generate_report(company_name, research_data, stock_data, news_data):
-    llm = LLM(
-        model="groq/llama-3.3-70b-versatile",
-        api_key=os.getenv("GROQ_API_KEY")
-    )
+    client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-    agent = Agent(
-        role="Chief Business Intelligence Officer",
-        goal="Synthesize all data into a powerful executive report",
-        backstory="""You are a Fortune 500 Chief Intelligence Officer who 
-        creates board-level reports combining research, financials, and news 
-        into actionable executive summaries.""",
-        llm=llm,
-        verbose=True,
-        max_iter=2
-    )
+    prompt = f"""You are a Fortune 500 Chief Intelligence Officer who
+    creates board-level reports combining research, financials, and news
+    into actionable executive summaries.
 
-    task = Task(
-        description=f"""Create a complete Executive Intelligence Report for {company_name}.
-        
-        Use this data:
-        RESEARCH: {research_data}
-        STOCK: {stock_data}
-        NEWS: {news_data}
-        
-        Structure the report as:
-        
-        🏢 EXECUTIVE SUMMARY
-        📈 FINANCIAL SNAPSHOT
-        📰 NEWS INTELLIGENCE  
-        ⚠️ RISK ASSESSMENT
-        🚀 OPPORTUNITIES
-        🎯 STRATEGIC RECOMMENDATION
-        
-        Make it professional, concise, and actionable. Max 400 words.""",
-        expected_output="Complete executive intelligence report",
-        agent=agent
-    )
+    Create a complete Executive Intelligence Report for {company_name}.
 
-    crew = Crew(agents=[agent], tasks=[task], verbose=False)
-    result = crew.kickoff()
-    return str(result)
+    Use this data:
+    RESEARCH: {research_data}
+    STOCK: {stock_data}
+    NEWS: {news_data}
+
+    Structure the report as:
+
+    🏢 EXECUTIVE SUMMARY
+    📈 FINANCIAL SNAPSHOT
+    📰 NEWS INTELLIGENCE
+    ⚠️ RISK ASSESSMENT
+    🚀 OPPORTUNITIES
+    🎯 STRATEGIC RECOMMENDATION
+
+    Make it professional, concise, and actionable. Max 400 words."""
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.4,
+        max_tokens=600,
+    )
+    return response.choices[0].message.content
+
 
 if __name__ == "__main__":
     print("📊 Testing Report Agent...")
@@ -57,4 +55,3 @@ if __name__ == "__main__":
 
     result = generate_report("Tesla", research, stock, news)
     print(result)
-    
