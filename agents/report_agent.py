@@ -37,7 +37,7 @@ def generate_report(company_name, research_data, stock_data, news_data):
     Make it professional, concise, and actionable. Max 400 words."""
 
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.4,
         max_tokens=600,

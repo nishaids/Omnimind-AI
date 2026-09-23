@@ -984,7 +984,7 @@ def send_chat(user_q, context=""):
         client = Groq(api_key=os.getenv("GROQ_API_KEY"))
         sys_msg = f"You are OMNIMIND AI expert business intelligence assistant. {context} Be concise, max 100 words, always actionable."
         msgs = [{"role":"system","content":sys_msg}] + st.session_state.chat_history[-6:]
-        resp = client.chat.completions.create(model="llama-3.3-70b-versatile", messages=msgs, max_tokens=150)
+        resp = client.chat.completions.create(model="openai/gpt-oss-120b", messages=msgs, max_tokens=150)
         st.session_state.chat_history.append({"role":"assistant","content":resp.choices[0].message.content})
         st.session_state.bot_mood = "happy"
     except Exception as e:
